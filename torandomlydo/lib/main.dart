@@ -10,11 +10,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'To Random Do',
+      title: 'To Randomly Do',
       theme: ThemeData(
         primarySwatch: Colors.orange,
       ),
-      home: const MyHomePage(title: 'To Random Do'),
+      home: const MyHomePage(title: 'To Randomly Do'),
     );
   }
 }
