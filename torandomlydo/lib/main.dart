@@ -29,50 +29,146 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  List _cards = ["Hola"];
 
   void _incrementCounter() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      _cards.add("Hola");
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'Love you this much mimisita',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+    return MaterialApp(
+      home: Scaffold(
+        body: Container(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                child: ListView.builder(
+                itemCount: _cards.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                    height: 220,
+                    width: double.maxFinite,
+                    child: Card(
+                      elevation: 5,
+                      child: Text(_cards[index])             
+                    ),
+                  );
+                }),
+              ),
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
+        floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
+      )
     );
   }
+
+Widget cryptoIcon(data) {
+  return Padding(
+    padding: const EdgeInsets.only(left: 15.0),
+    child: Align(
+        alignment: Alignment.centerLeft,
+        child: Icon(
+          data[‘icon’],
+          color: data[‘iconColor’],
+          size: 40,
+        )),
+  );
+ }
+Widget cryptoNameSymbol(data) {
+  return Align(
+    alignment: Alignment.centerLeft,
+    child: RichText(
+      text: TextSpan(
+        text: ‘${data[‘name’]}’,
+        style: TextStyle(
+            fontWeight: FontWeight.bold, color: Colors.black, fontSize: 20),
+        children: <TextSpan>[
+          TextSpan(
+              text: ‘\n${data[‘symbol’]}’,
+              style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold)),
+          ],
+        ),
+      ),
+    );
+ }
+Widget cryptoChange(data) {
+  return Align(
+    alignment: Alignment.topRight,
+    child: RichText(
+      text: TextSpan(
+        text: ‘${data[‘change’]}’,
+        style: TextStyle(
+            fontWeight: FontWeight.bold, color: Colors.green, fontSize: 20),
+        children: <TextSpan>[
+          TextSpan(
+              text: ‘\n${data[‘changeValue’]}’,
+              style: TextStyle(
+                  color: data[‘changeColor’],
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold)),
+         ],
+       ),
+     ),
+   );
+ }
+Widget changeIcon(data) {
+  return Align(
+      alignment: Alignment.topRight,
+      child: data[‘change’].contains(‘-’)
+          ? Icon(
+        Typicons.arrow_sorted_down,
+        color: data[‘changeColor’],
+        size: 30,
+      )
+          : Icon(
+        Typicons.arrow_sorted_up,
+        color: data[‘changeColor’],
+        size: 30,
+      ));
+ }
+Widget cryptoAmount(data) {
+  return Align(
+  alignment: Alignment.centerLeft,
+  child: Padding(
+    padding: const EdgeInsets.only(left: 20.0),
+    child: Row(
+      children: <Widget>[
+        RichText(
+          textAlign: TextAlign.left,
+          text: TextSpan(
+            text: ‘\n${data[‘value’]}’,
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 35,
+            ),
+            children: <TextSpan>[
+              TextSpan(
+                  text: ‘\n0.1349’,
+                  style: TextStyle(
+                      color: Colors.grey,
+                      fontStyle: FontStyle.italic,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold)),
+            ],
+          ),
+        ),
+      ],
+    ),
+  ),
+);
+}
 }
