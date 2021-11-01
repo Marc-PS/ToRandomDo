@@ -31,18 +31,53 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List _cards = ["Hola"];
 
-  void _incrementCounter() {
+  _addNote(String nota) {
     setState(() {
-      _cards.add("Hola");
+      _cards.add(nota);
     });
+    Navigator.pop(context);
+  }
+
+  _newNote() {
+
+    final myController = TextEditingController();
+
+    @override
+    void dispose() {
+      myController.dispose();
+     super.dispose();
+    }
+
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Add note"),
+          content: TextFormField(
+            controller: myController,
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Enter your note',
+            ),
+          ),
+          actions: <Widget>[
+            ElevatedButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+            ElevatedButton(onPressed: () => _addNote(myController.text), child: const Text('Accept')),
+          ],
+          actionsPadding: const EdgeInsets.symmetric(horizontal: 18.0),
+          actionsAlignment: MainAxisAlignment.center,
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Container(
-          child: Column(
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+        ),
+        body: Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
@@ -51,124 +86,26 @@ class _MyHomePageState extends State<MyHomePage> {
                 itemCount: _cards.length,
                 itemBuilder: (context, index) {
                   return Container(
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                    height: 220,
+                    padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                    height: 80,
                     width: double.maxFinite,
                     child: Card(
                       elevation: 5,
-                      child: Text(_cards[index])             
-                    ),
+                      child: ListTile(
+                        trailing: Icon(Icons.add_to_drive_sharp),
+                        title: Text(_cards[index], maxLines: 3, style: TextStyle(color: Colors.black.withOpacity(0.6)))
+                      ),
+                    )
                   );
                 }),
               ),
             ],
-          ),
         ),
         floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
+        onPressed: _newNote,
+        tooltip: 'Add note',
         child: const Icon(Icons.add),
       ),
-      )
     );
   }
-
-Widget cryptoIcon(data) {
-  return Padding(
-    padding: const EdgeInsets.only(left: 15.0),
-    child: Align(
-        alignment: Alignment.centerLeft,
-        child: Icon(
-          data[‘icon’],
-          color: data[‘iconColor’],
-          size: 40,
-        )),
-  );
- }
-Widget cryptoNameSymbol(data) {
-  return Align(
-    alignment: Alignment.centerLeft,
-    child: RichText(
-      text: TextSpan(
-        text: ‘${data[‘name’]}’,
-        style: TextStyle(
-            fontWeight: FontWeight.bold, color: Colors.black, fontSize: 20),
-        children: <TextSpan>[
-          TextSpan(
-              text: ‘\n${data[‘symbol’]}’,
-              style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold)),
-          ],
-        ),
-      ),
-    );
- }
-Widget cryptoChange(data) {
-  return Align(
-    alignment: Alignment.topRight,
-    child: RichText(
-      text: TextSpan(
-        text: ‘${data[‘change’]}’,
-        style: TextStyle(
-            fontWeight: FontWeight.bold, color: Colors.green, fontSize: 20),
-        children: <TextSpan>[
-          TextSpan(
-              text: ‘\n${data[‘changeValue’]}’,
-              style: TextStyle(
-                  color: data[‘changeColor’],
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold)),
-         ],
-       ),
-     ),
-   );
- }
-Widget changeIcon(data) {
-  return Align(
-      alignment: Alignment.topRight,
-      child: data[‘change’].contains(‘-’)
-          ? Icon(
-        Typicons.arrow_sorted_down,
-        color: data[‘changeColor’],
-        size: 30,
-      )
-          : Icon(
-        Typicons.arrow_sorted_up,
-        color: data[‘changeColor’],
-        size: 30,
-      ));
- }
-Widget cryptoAmount(data) {
-  return Align(
-  alignment: Alignment.centerLeft,
-  child: Padding(
-    padding: const EdgeInsets.only(left: 20.0),
-    child: Row(
-      children: <Widget>[
-        RichText(
-          textAlign: TextAlign.left,
-          text: TextSpan(
-            text: ‘\n${data[‘value’]}’,
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 35,
-            ),
-            children: <TextSpan>[
-              TextSpan(
-                  text: ‘\n0.1349’,
-                  style: TextStyle(
-                      color: Colors.grey,
-                      fontStyle: FontStyle.italic,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold)),
-            ],
-          ),
-        ),
-      ],
-    ),
-  ),
-);
-}
 }
